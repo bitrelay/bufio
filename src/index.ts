@@ -8,12 +8,12 @@ import { BufferWriter } from './writer'
 
 export { encoding, EncodingError, BufferReader, BufferWriter, StaticWriter, Struct }
 
-export function read(data: Buffer, zeroCopy: boolean): BufferReader {
+export function read(data: Buffer, zeroCopy?: boolean): BufferReader {
     return new BufferReader(data, zeroCopy)
 }
 
-export function write(size: number): BufferWriter | StaticWriter {
-    return size != null ? new StaticWriter(size) : new BufferWriter()
+export function write(size?: number): BufferWriter | StaticWriter {
+    return size !== undefined ? new StaticWriter(size) : new BufferWriter()
 }
 
 export function pool(size: number): StaticWriter {
