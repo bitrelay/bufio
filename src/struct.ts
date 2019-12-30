@@ -81,6 +81,9 @@ export class Struct {
         return bw
     }
 
+    /**
+     * Convert to buffer.
+     */
     public toBuffer(): Buffer {
         const size = this.getSize()
         const bw = size === -1 ? new BufferWriter() : new StaticWriter(size)
@@ -88,14 +91,23 @@ export class Struct {
         return bw.render()
     }
 
+    /**
+     * Convert to hex.
+     */
     public toHex(): string {
         return this.toBuffer().toString('hex')
     }
 
+    /**
+     * Convert to base64.
+     */
     public toBase64(): string {
         return this.toBuffer().toString('base64')
     }
 
+    /**
+     * Convert to object.
+     */
     public toObject(): object {
         return (this.constructor as any).read(new BufferReader(this.toBuffer()))
     }
