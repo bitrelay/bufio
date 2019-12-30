@@ -31,94 +31,46 @@ assert(br.readString(3) === 'foo')
 ```typescript
 import { BufferReader, BufferWriter, Struct } from '@bitrelay/bufio'
 
-interface ParentSchema {
-  value: number
-  children: ChildSchema[]
-}
+class MyStruct extends Struct {
+  public str = 'hello'
 
-class Parent extends Struct implements ParentSchema {
-  public value: number
-
-  public children: Child[] = []
-
-  constructor(data: Partial<ParentSchema> = {}) {
-    super()
-    if (data.value) {
-      this.value = data.value
-    }
-    if (data.children) {
-      for (const child of data.children) {
-        this.children.push(new Child(child))
-      }
-    }
-  }
+  public value = 0
 
   public write(bw: BufferWriter): BufferWriter {
+    bw.writeVarString(this.str, 'ascii')
     bw.writeU64(this.value)
-    bw.writeVarint(this.children.length)
-    for (const child of this.children) {
-      child.write(bw)
-    }
     return bw
   }
 
-  public static read(br: BufferReader): ParentSchema {
+  public static read(br: BufferReader): object {
+    const str = br.readVarString('ascii')
     const value = br.readU64()
-    const childCount = br.readVarint()
-    const children: ChildSchema[] = []
-    for (let i = 0; i < childCount; i++) {
-      children.push(Child.read(br))
-    }
-    return { value, children }
+    return { str, value }
   }
 }
 
-interface ChildSchema {
-  foo: string
-}
-
-class Child extends Struct implements ChildSchema {
-  public foo: string
-
-  constructor(data: Partial<ChildSchema> = {}) {
-    super()
-    if (data.foo) {
-      this.foo = data.foo
-    }
-  }
-
-  public write(bw: BufferWriter): BufferWriter {
-    bw.writeVarString(this.foo, 'ascii')
-    return bw
-  }
-
-  public static read(br: BufferReader): ChildSchema {
-    return { foo: br.readVarString('ascii') }
-  }
-}
-
-const parent = new Parent({ value: 1, children: [{ foo: 'bar' }, { foo: 'another' }] })
+const instance = new MyStruct()
 
 console.log('Buffer:')
-console.log(parent.toBuffer())
+console.log(instance.toBuffer())
 
 console.log('Decoded:')
-console.log(Parent.fromBuffer(parent.toBuffer()))
+console.log(MyStruct.fromBuffer(instance.toBuffer()))
 
 console.log('Hex:')
-console.log(parent.toHex())
+console.log(instance.toHex())
 
 console.log('Decoded:')
-console.log(Parent.fromHex(parent.toHex()))
+console.log(MyStruct.fromHex(instance.toHex()))
 
 console.log('Base64:')
-console.log(parent.toBase64())
+console.log(instance.toBase64())
 
 console.log('Decoded:')
-console.log(Parent.fromBase64(parent.toBase64()))
+console.log(MyStruct.fromBase64(instance.toBase64()))
 
 console.log('Object:')
-console.log(parent.toObject())
+console.log(instance.toObject())
 ```
 
 ## Contribution and License Agreement
