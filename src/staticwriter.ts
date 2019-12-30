@@ -203,7 +203,6 @@ export class StaticWriter {
      * Write uint32le.
      * @param value
      */
-
     public writeU32(value: number): StaticWriter {
         this.check(4)
         this.offset = encoding.writeU32(this.data, value, this.offset)
@@ -214,7 +213,6 @@ export class StaticWriter {
      * Write uint32be.
      * @param value
      */
-
     public writeU32BE(value: number): StaticWriter {
         this.check(4)
         this.offset = encoding.writeU32BE(this.data, value, this.offset)
@@ -225,7 +223,6 @@ export class StaticWriter {
      * Write uint40le.
      * @param value
      */
-
     public writeU40(value: number): StaticWriter {
         this.check(5)
         this.offset = encoding.writeU40(this.data, value, this.offset)

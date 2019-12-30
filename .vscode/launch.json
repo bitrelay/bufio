@@ -2,12 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
-            "request": "launch",
-            "name": "Run benchmark",
-            "program": "${workspaceFolder}/dist/benchmark/index.js"
-        },
-        {
             "name": "Run tests",
             "type": "node",
             "request": "launch",

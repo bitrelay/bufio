@@ -68,7 +68,6 @@ export class BufferWriter {
      * Create a buffer writer.
      * @constructor
      */
-
     constructor() {
         // ..
     }
@@ -77,7 +76,6 @@ export class BufferWriter {
      * Allocate and render the final buffer.
      * @returns Rendered buffer.
      */
-
     public render(): Buffer {
         const data = Buffer.allocUnsafe(this.offset)
 
@@ -760,7 +758,6 @@ export class BufferWriter {
      * @param value
      * @param size
      */
-
     public fill(value: number, size: number): BufferWriter {
         enforce((value & 0xff) === value, 'value', 'byte')
         enforce(size >>> 0 === size, 'size', 'integer')
