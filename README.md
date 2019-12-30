@@ -1,6 +1,6 @@
 # bufio
 
-![](https://github.com/bitrelay/bufio/workflows/Main%20CI/badge.svg)
+![](https://github.com/bitrelay/bufio/workflows/Main%20CI/badge.svg) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Buffer and serialization utilities for node.js and browser.
 
