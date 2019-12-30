@@ -250,7 +250,6 @@ export class BufferReader {
     /**
      * Read uint48le.
      */
-
     public readU48(): number {
         this.check(6)
         const ret = encoding.readU48(this.data, this.offset)
@@ -261,7 +260,6 @@ export class BufferReader {
     /**
      * Read uint48be.
      */
-
     public readU48BE(): number {
         this.check(6)
         const ret = encoding.readU48BE(this.data, this.offset)

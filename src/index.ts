@@ -1,4 +1,3 @@
-import { custom } from './custom'
 import * as encoding from './encoding'
 import { enforce } from './enforce'
 import { EncodingError } from './error'
@@ -7,7 +6,7 @@ import { StaticWriter } from './staticwriter'
 import { Struct } from './struct'
 import { BufferWriter } from './writer'
 
-export { custom, encoding, EncodingError, BufferReader, BufferWriter, StaticWriter, Struct }
+export { encoding, EncodingError, BufferReader, BufferWriter, StaticWriter, Struct }
 
 export function read(data: Buffer, zeroCopy: boolean): BufferReader {
     return new BufferReader(data, zeroCopy)
