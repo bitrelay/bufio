@@ -1,6 +1,14 @@
 # bufio
 
+![](https://github.com/bitrelay/bufio/workflows/Main%20CI/badge.svg)
+
 Buffer and serialization utilities for node.js and browser.
+
+## Installation
+
+```
+npm install @bitrelay/bufio
+```
 
 ## Usage
 
@@ -25,30 +33,30 @@ import { BufferReader, BufferWriter, Struct } from '@bitrelay/bufio'
 
 interface ParentSchema {
   value: number
-  childs: ChildSchema[]
+  children: ChildSchema[]
 }
 
 class Parent extends Struct implements ParentSchema {
   public value: number
 
-  public childs: Child[] = []
+  public children: Child[] = []
 
   constructor(data: Partial<ParentSchema> = {}) {
     super()
     if (data.value) {
       this.value = data.value
     }
-    if (data.childs) {
-      for (const child of data.childs) {
-        this.childs.push(new Child(child))
+    if (data.children) {
+      for (const child of data.children) {
+        this.children.push(new Child(child))
       }
     }
   }
 
   public write(bw: BufferWriter): BufferWriter {
     bw.writeU64(this.value)
-    bw.writeVarint(this.childs.length)
-    for (const child of this.childs) {
+    bw.writeVarint(this.children.length)
+    for (const child of this.children) {
       child.write(bw)
     }
     return bw
@@ -57,11 +65,11 @@ class Parent extends Struct implements ParentSchema {
   public static read(br: BufferReader): ParentSchema {
     const value = br.readU64()
     const childCount = br.readVarint()
-    const childs: ChildSchema[] = []
+    const children: ChildSchema[] = []
     for (let i = 0; i < childCount; i++) {
-      childs.push(Child.read(br))
+      children.push(Child.read(br))
     }
-    return { value, childs }
+    return { value, children }
   }
 }
 
@@ -89,7 +97,7 @@ class Child extends Struct implements ChildSchema {
   }
 }
 
-const parent = new Parent({ value: 1, childs: [{ foo: 'bar' }, { foo: 'another' }] })
+const parent = new Parent({ value: 1, children: [{ foo: 'bar' }, { foo: 'another' }] })
 
 console.log('Buffer:')
 console.log(parent.toBuffer())

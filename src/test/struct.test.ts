@@ -4,7 +4,7 @@ import { BufferReader, BufferWriter, Struct } from '../index'
 interface ParentSchema {
     str: string
     value: number
-    childs: ChildSchema[]
+    children: ChildSchema[]
 }
 
 class Parent extends Struct implements ParentSchema {
@@ -12,7 +12,7 @@ class Parent extends Struct implements ParentSchema {
 
     public value: number
 
-    public childs: Child[] = []
+    public children: Child[] = []
 
     constructor(data: Partial<ParentSchema> = {}) {
         super()
@@ -22,9 +22,9 @@ class Parent extends Struct implements ParentSchema {
         if (data.value) {
             this.value = data.value
         }
-        if (data.childs) {
-            for (const child of data.childs) {
-                this.childs.push(new Child(child))
+        if (data.children) {
+            for (const child of data.children) {
+                this.children.push(new Child(child))
             }
         }
     }
@@ -32,8 +32,8 @@ class Parent extends Struct implements ParentSchema {
     public write(bw: BufferWriter): BufferWriter {
         bw.writeVarString(this.str, 'ascii')
         bw.writeU64(this.value)
-        bw.writeVarint(this.childs.length)
-        for (const child of this.childs) {
+        bw.writeVarint(this.children.length)
+        for (const child of this.children) {
             child.write(bw)
         }
         return bw
@@ -43,11 +43,11 @@ class Parent extends Struct implements ParentSchema {
         const str = br.readVarString('ascii')
         const value = br.readU64()
         const childCount = br.readVarint()
-        const childs: ChildSchema[] = []
+        const children: ChildSchema[] = []
         for (let i = 0; i < childCount; i++) {
-            childs.push(Child.read(br))
+            children.push(Child.read(br))
         }
-        return { str, value, childs }
+        return { str, value, children }
     }
 }
 
@@ -90,7 +90,7 @@ describe('Struct', () => {
         const data = {
             str: 'anything',
             value: 66,
-            childs: [
+            children: [
                 {
                     foo: 'one',
                     bar: 11,
