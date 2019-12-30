@@ -1,64 +1,116 @@
 # bufio
 
-Buffer and serialization utilities for javascript.
+Buffer and serialization utilities for node.js and browser.
 
 ## Usage
 
-``` js
-const assert = require('assert');
-const bio = require('bufio');
+```typescript
+import * as assert from 'assert'
+import * as bufio from '@bitrelay/bufio'
 
-const bw = bio.write();
-bw.writeU64(100);
-bw.writeString('foo');
-const data = bw.render();
+const bw = bufio.write()
+bw.writeU64(100)
+bw.writeString('foo')
+const data = bw.render()
 
-const br = bio.read(data);
-assert(br.readU64() === 100);
-assert(br.readString(3) === 'foo');
+const br = bufio.read(data)
+assert(br.readU64() === 100)
+assert(br.readString(3) === 'foo')
 ```
 
 ## Struct Usage
 
-``` js
-const bio = require('bufio');
+```typescript
+import { BufferReader, BufferWriter, Struct } from '@bitrelay/bufio'
 
-class MyStruct extends bio.Struct {
-  constructor() {
-    super();
-    this.str = 'hello';
-    this.value = 0;
+interface ParentSchema {
+  value: number
+  childs: ChildSchema[]
+}
+
+class Parent extends Struct implements ParentSchema {
+  public value: number
+
+  public childs: Child[] = []
+
+  constructor(data: Partial<ParentSchema> = {}) {
+    super()
+    if (data.value) {
+      this.value = data.value
+    }
+    if (data.childs) {
+      for (const child of data.childs) {
+        this.childs.push(new Child(child))
+      }
+    }
   }
 
-  write(bw) {
-    bw.writeVarString(this.str, 'ascii');
-    bw.writeU64(this.value);
-    return this;
+  public write(bw: BufferWriter): BufferWriter {
+    bw.writeU64(this.value)
+    bw.writeVarint(this.childs.length)
+    for (const child of this.childs) {
+      child.write(bw)
+    }
+    return bw
   }
 
-  read(br) {
-    this.str = br.readVarString('ascii');
-    this.value = br.readU64();
-    return this;
+  public static read(br: BufferReader): ParentSchema {
+    const value = br.readU64()
+    const childCount = br.readVarint()
+    const childs: ChildSchema[] = []
+    for (let i = 0; i < childCount; i++) {
+      childs.push(Child.read(br))
+    }
+    return { value, childs }
   }
 }
 
-const obj = new MyStruct();
+interface ChildSchema {
+  foo: string
+}
 
-console.log('Buffer:');
-console.log(obj.encode());
+class Child extends Struct implements ChildSchema {
+  public foo: string
 
-console.log('Decoded:');
-console.log(MyStruct.decode(obj.encode()));
+  constructor(data: Partial<ChildSchema> = {}) {
+    super()
+    if (data.foo) {
+      this.foo = data.foo
+    }
+  }
 
-console.log('Hex:');
-console.log(obj.toHex());
+  public write(bw: BufferWriter): BufferWriter {
+    bw.writeVarString(this.foo, 'ascii')
+    return bw
+  }
 
-console.log('Decoded:');
-console.log(MyStruct.fromHex(obj.toHex()));
+  public static read(br: BufferReader): ChildSchema {
+    return { foo: br.readVarString('ascii') }
+  }
+}
 
-console.log('Base64:');
-console.log(obj.toBase64());
+const parent = new Parent({ value: 1, childs: [{ foo: 'bar' }, { foo: 'another' }] })
+
+console.log('Buffer:')
+console.log(parent.toBuffer())
+
+console.log('Decoded:')
+console.log(Parent.fromBuffer(parent.toBuffer()))
+
+console.log('Hex:')
+console.log(parent.toHex())
+
+console.log('Decoded:')
+console.log(Parent.fromHex(parent.toHex()))
+
+console.log('Base64:')
+console.log(parent.toBase64())
+
+console.log('Decoded:')
+console.log(Parent.fromBase64(parent.toBase64()))
+
+console.log('Object:')
+console.log(parent.toObject())
 ```
 
 ## Contribution and License Agreement
@@ -69,6 +121,8 @@ all code is your original work. `</legalese>`
 
 ## License
 
-- Copyright (c) 2017, Christopher Jeffrey (MIT License).
+- Copyright (c) 2019, Philipp Petzold (MIT License).
+- Copyright (c) 2014-2017, Christopher Jeffrey (https://github.com/bcoin-org/bufio).
+- Copyright (c) 2014-2015, Fedor Indutny (https://github.com/bcoin-org/bufio).
 
 See LICENSE for more info.
