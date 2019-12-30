@@ -88,15 +88,15 @@ class Child extends Struct implements ChildSchema {
 describe('Struct', () => {
     it('should pass', () => {
         const data = {
-            str: 'HelloWorld',
+            str: 'anything',
             value: 66,
             childs: [
                 {
-                    foo: 'Goodbye',
+                    foo: 'one',
                     bar: 11,
                 },
                 {
-                    foo: 'Blank',
+                    foo: 'another',
                     bar: 16,
                 },
             ],
@@ -105,10 +105,10 @@ describe('Struct', () => {
         assert.deepStrictEqual(Parent.fromBuffer(parent.toBuffer()), parent)
         assert.strictEqual(
             parent.toHex(),
-            '0a48656c6c6f576f726c6442000000000000000207476f6f646279650b0000000000000005426c616e6b1000000000000000'
+            '08616e797468696e67420000000000000002036f6e650b0000000000000007616e6f746865721000000000000000'
         )
         assert.deepStrictEqual(Parent.fromHex(parent.toHex()), parent)
-        assert.strictEqual(parent.toBase64(), 'CkhlbGxvV29ybGRCAAAAAAAAAAIHR29vZGJ5ZQsAAAAAAAAABUJsYW5rEAAAAAAAAAA=')
+        assert.strictEqual(parent.toBase64(), 'CGFueXRoaW5nQgAAAAAAAAACA29uZQsAAAAAAAAAB2Fub3RoZXIQAAAAAAAAAA==')
         assert.deepStrictEqual(Parent.fromBase64(parent.toBase64()), parent)
         assert.deepStrictEqual(parent.toObject(), data)
     })
