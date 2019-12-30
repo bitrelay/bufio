@@ -1,5 +1,5 @@
 {
-  "name": "@bitrelay/typed-bufio",
+  "name": "@bitrelay/bufio",
   "version": "1.0.0",
   "description": "Buffer and serialization utilities for typescript",
   "main": "dist/index.js",
@@ -33,11 +33,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bitrelay/typed-bufio.git"
+    "url": "git+https://github.com/bitrelay/bufio.git"
   },
-  "homepage": "https://github.com/bitrelay/typed-bufio#readme",
+  "homepage": "https://github.com/bitrelay/bufio#readme",
   "bugs": {
-    "url": "https://github.com/bitrelay/typed-bufio/issues"
+    "url": "https://github.com/bitrelay/bufio/issues"
   },
   "publishConfig": {
     "access": "public"
