@@ -2,15 +2,15 @@
   "name": "@bitrelay/bufio",
   "version": "1.0.0",
   "description": "Buffer and serialization utilities for typescript",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "files": [
-    "dist/**/*"
+    "lib/**/*"
   ],
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "format": "prettier --config .prettierrc --write --list-different 'src/**/*.ts'",
-    "test": "mocha dist/test --colors --exit --require source-map-support/register",
+    "test": "mocha lib/test --colors --exit --require source-map-support/register",
     "build": "tsc",
     "watch": "tsc -w",
     "prepublishOnly": "npm run build && npm run format && npm run lint && npm test"

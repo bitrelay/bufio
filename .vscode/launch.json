@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
-            "args": ["dist/test/index.js", "--colors", "--exit", "--require", "source-map-support/register"],
+            "args": ["lib/test/index.js", "--colors", "--exit", "--require", "source-map-support/register"],
             "runtimeArgs": ["--nolazy"],
             "sourceMaps": true,
             "smartStep": true,
