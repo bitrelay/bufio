@@ -6,7 +6,7 @@ import { BufferWriter } from './writer'
 /**
  * Serializable struct
  */
-export class Struct {
+export abstract class Struct {
     /**
      * Create a struct.
      * @param data
@@ -27,17 +27,17 @@ export class Struct {
      * Instantiate struct from buffer.
      * @returns Instance.
      */
-    public static fromBuffer(data: Buffer): Struct {
+    public static fromBuffer<T extends Struct>(this: (new () => T) & typeof Struct, data: Buffer): T {
         enforce(Buffer.isBuffer(data), 'data', 'buffer')
         const br = new BufferReader(data)
-        return new this(this.read(br))
+        return new this(this.read(br)) as T
     }
 
     /**
      * Instantiate struct from hex.
      * @returns Instance.
      */
-    public static fromHex(str: string): Struct {
+    public static fromHex<T extends Struct>(this: (new () => T) & typeof Struct, str: string): T {
         enforce(typeof str === 'string', 'str', 'string')
         const size = str.length >>> 1
         const data = Buffer.from(str, 'hex')
@@ -46,14 +46,14 @@ export class Struct {
             throw new Error('Invalid hex string.')
         }
 
-        return this.fromBuffer(data)
+        return this.fromBuffer(data) as T
     }
 
     /**
      * Instantiate struct from base64.
      * @returns Instance.
      */
-    public static fromBase64(str: string): Struct {
+    public static fromBase64<T extends Struct>(this: (new () => T) & typeof Struct, str: string): T {
         enforce(typeof str === 'string', 'str', 'string')
         const data = Buffer.from(str, 'base64')
 
@@ -61,7 +61,7 @@ export class Struct {
             throw new Error('Invalid base64 string.')
         }
 
-        return this.fromBuffer(data)
+        return this.fromBuffer(data) as T
     }
 
     /**
