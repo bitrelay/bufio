@@ -599,6 +599,8 @@ export class BufferReader {
      * Read a 32-byte hash.
      * @param enc - Any buffer-supported encoding.
      */
+    public readHash(): Buffer
+    public readHash(enc: BufferEncoding): string
     public readHash(enc?: BufferEncoding): Buffer | string {
         if (enc) {
             return this.readString(32, enc)
