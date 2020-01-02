@@ -8,18 +8,10 @@ import { BufferWriter } from './writer'
  */
 export abstract class Struct {
     /**
-     * Create a struct.
-     * @param data
-     */
-    constructor(_: Partial<object> = {}) {
-        // ..
-    }
-
-    /**
      * Override to define the deserialization instructions.
      * @returns Plain object.
      */
-    public static read(_: BufferReader): Partial<object> {
+    public static read(_br: BufferReader): object {
         return {}
     }
 
@@ -30,7 +22,7 @@ export abstract class Struct {
     public static fromBuffer<T extends Struct>(this: (new () => T) & typeof Struct, data: Buffer): T {
         enforce(Buffer.isBuffer(data), 'data', 'buffer')
         const br = new BufferReader(data)
-        return new this(this.read(br)) as T
+        return this.read(br) as T
     }
 
     /**
@@ -103,13 +95,6 @@ export abstract class Struct {
      */
     public toBase64(): string {
         return this.toBuffer().toString('base64')
-    }
-
-    /**
-     * Convert to object.
-     */
-    public toObject(): object {
-        return (this.constructor as any).read(new BufferReader(this.toBuffer()))
     }
 }
 

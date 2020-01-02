@@ -32,9 +32,12 @@ assert(br.readString(3) === 'foo')
 import { BufferReader, BufferWriter, Struct } from '@bitrelay/bufio'
 
 class MyStruct extends Struct {
-  public str = 'hello'
-
-  public value = 0
+  public str: string
+  public value: number
+  constructor(data: Partial<MyStruct> = {}) {
+    super()
+    Object.assign(this, data)
+  }
 
   public write(bw: BufferWriter): BufferWriter {
     bw.writeVarString(this.str, 'ascii')
@@ -42,14 +45,14 @@ class MyStruct extends Struct {
     return bw
   }
 
-  public static read(br: BufferReader): object {
+  public static read(br: BufferReader): MyStruct {
     const str = br.readVarString('ascii')
     const value = br.readU64()
-    return { str, value }
+    return new this({ str, value })
   }
 }
 
-const instance = new MyStruct()
+const instance = new MyStruct({ str: 'hello', value: 0 })
 
 console.log('Buffer:')
 console.log(instance.toBuffer())
@@ -68,9 +71,6 @@ console.log(instance.toBase64())
 
 console.log('Decoded:')
 console.log(MyStruct.fromBase64(instance.toBase64()))
-
-console.log('Object:')
-console.log(instance.toObject())
 ```
 
 ## Contribution and License Agreement
