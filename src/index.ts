@@ -12,6 +12,8 @@ export function read(data: Buffer, zeroCopy?: boolean): BufferReader {
     return new BufferReader(data, zeroCopy)
 }
 
+export function write(): BufferWriter
+export function write(size: number): StaticWriter
 export function write(size?: number): BufferWriter | StaticWriter {
     return size !== undefined ? new StaticWriter(size) : new BufferWriter()
 }
