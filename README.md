@@ -39,16 +39,16 @@ class MyStruct extends Struct {
     Object.assign(this, data)
   }
 
-  public write(bw: BufferWriter): BufferWriter {
-    bw.writeVarString(this.str, 'ascii')
-    bw.writeU64(this.value)
-    return bw
-  }
-
-  public static read(br: BufferReader): MyStruct {
+  public static fromReader(br: BufferReader): MyStruct {
     const str = br.readVarString('ascii')
     const value = br.readU64()
     return new this({ str, value })
+  }
+
+  public toWriter(bw: BufferWriter): BufferWriter {
+    bw.writeVarString(this.str, 'ascii')
+    bw.writeU64(this.value)
+    return bw
   }
 }
 

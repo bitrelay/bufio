@@ -11,7 +11,7 @@ export abstract class Struct {
      * Override to define the deserialization instructions.
      * @returns Plain object.
      */
-    public static read(_br: BufferReader): object {
+    public static fromReader(_br: BufferReader): object {
         return {}
     }
 
@@ -22,7 +22,7 @@ export abstract class Struct {
     public static fromBuffer<T extends Struct>(this: (new () => T) & typeof Struct, data: Buffer): T {
         enforce(Buffer.isBuffer(data), 'data', 'buffer')
         const br = new BufferReader(data)
-        return this.read(br) as T
+        return this.fromReader(br) as T
     }
 
     /**
@@ -69,7 +69,7 @@ export abstract class Struct {
      * Override to define serialization instructions.
      * @param bw Statically allocated writer if size calculation defined.
      */
-    public write(bw: BufferWriter | StaticWriter): BufferWriter | StaticWriter {
+    public toWriter(bw: BufferWriter | StaticWriter): BufferWriter | StaticWriter {
         return bw
     }
 
@@ -79,7 +79,7 @@ export abstract class Struct {
     public toBuffer(): Buffer {
         const size = this.getSize()
         const bw = size === -1 ? new BufferWriter() : new StaticWriter(size)
-        this.write(bw)
+        this.toWriter(bw)
         return bw.render()
     }
 

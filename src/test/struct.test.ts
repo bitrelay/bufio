@@ -13,25 +13,25 @@ class Parent extends Struct {
         Object.assign(this, data)
     }
 
-    public write(bw: BufferWriter): BufferWriter {
-        bw.writeVarString(this.str, 'ascii')
-        bw.writeU64(this.value)
-        bw.writeVarint(this.children.length)
-        for (const child of this.children) {
-            child.write(bw)
-        }
-        return bw
-    }
-
-    public static read(br: BufferReader): Parent {
+    public static fromReader(br: BufferReader): Parent {
         const str = br.readVarString('ascii')
         const value = br.readU64()
         const childCount = br.readVarint()
         const children: Child[] = []
         for (let i = 0; i < childCount; i++) {
-            children.push(Child.read(br))
+            children.push(Child.fromReader(br))
         }
         return new this({ str, value, children })
+    }
+
+    public toWriter(bw: BufferWriter): BufferWriter {
+        bw.writeVarString(this.str, 'ascii')
+        bw.writeU64(this.value)
+        bw.writeVarint(this.children.length)
+        for (const child of this.children) {
+            child.toWriter(bw)
+        }
+        return bw
     }
 }
 
@@ -50,17 +50,17 @@ class Child extends Struct {
         }
     }
 
-    public write(bw: BufferWriter): BufferWriter {
-        bw.writeVarString(this.foo, 'ascii')
-        bw.writeU64(this.bar)
-        return bw
-    }
-
-    public static read(br: BufferReader): Child {
+    public static fromReader(br: BufferReader): Child {
         return new this({
             foo: br.readVarString('ascii'),
             bar: br.readU64(),
         })
+    }
+
+    public toWriter(bw: BufferWriter): BufferWriter {
+        bw.writeVarString(this.foo, 'ascii')
+        bw.writeU64(this.bar)
+        return bw
     }
 }
 
