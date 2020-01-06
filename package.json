@@ -1,8 +1,9 @@
 {
   "name": "@bitrelay/bufio",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Buffer and serialization utilities",
   "main": "lib/index.js",
+  "module": "lib/index.esm.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib/**/*"
@@ -10,10 +11,30 @@
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "format": "prettier --config .prettierrc --write --list-different 'src/**/*.ts'",
-    "test": "mocha lib/test --colors --exit --require source-map-support/register",
-    "build": "tsc",
-    "watch": "tsc -w",
-    "prepublishOnly": "npm run build && npm run format && npm run lint && npm test"
+    "build": "bili --format cjs --format esm",
+    "test": "nyc mocha",
+    "watch": "mocha --watch --watch-extensions ts",
+    "prepublishOnly": "rm -rf lib && npm run build && npm run format && npm run lint && npm test"
+  },
+  "nyc": {
+    "all": true,
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/test/*.ts"
+    ],
+    "reporter": [
+      "text",
+      "json"
+    ]
+  },
+  "mocha": {
+    "spec": "src/test/index.ts",
+    "require": "ts-node/register"
   },
   "keywords": [
     "buffer",
@@ -24,9 +45,12 @@
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.21",
+    "bili": "^4.8.1",
     "mocha": "^6.2.2",
+    "nyc": "^15.0.0",
     "prettier": "^1.19.1",
-    "source-map-support": "^0.5.16",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "ts-node": "^8.5.4",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.4"

@@ -2,7 +2,6 @@
     "compilerOptions": {
         "target": "es2019",
         "module": "commonjs",
-        "lib": ["dom", "es2019"],
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "declaration": true,
@@ -23,8 +22,7 @@
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
-        "suppressImplicitAnyIndexErrors": false,
-        "types": ["mocha", "node"]
+        "suppressImplicitAnyIndexErrors": false
     },
     "include": ["src"]
 }
